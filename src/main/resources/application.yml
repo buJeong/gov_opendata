@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: gov_opendata
+
+  datasource:
+    metadb:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/METADB
+        username: dev
+        password: dev1!
+
+    opendb:
+      hikari:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://localhost:3306/OPENDB
+        username: dev
+        password: dev1!
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    root: DEBUG
+    org:
+      springframework:
+        batch: DEBUG
+        boot:
+          autoconfigure: ERROR
+
+
+apis:
+  numOfRows: 10
+  resultType: json
+  keys:
+    encoding: 발급받은키입력
+    decoding: 발급받은키입력
+  urls:
+    base: apis.data.go.kr
+    operation:
+      officeInfo: /B551982/pbdo/inf_101_00010001
+      officeBicycleInfo: /B551982/pbdo/inf_101_00010002
+    
