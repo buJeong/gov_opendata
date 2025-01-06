@@ -14,7 +14,7 @@ public class PbroBicycleInfoDTO {
 
     private String rntstnNm;                   //대여소명
 
-    private int lcgvmnInstCd;                 //지자체 코드
+    private String lcgvmnInstCd;                 //지자체 코드
 
     private int bcyclTpkctNocs;                 //자전거 주차 총 건수
 

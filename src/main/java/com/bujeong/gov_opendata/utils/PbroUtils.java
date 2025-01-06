@@ -42,11 +42,7 @@ public class PbroUtils {
 	
 	private WebClient webClient;
 
-	public JsonNode getPbroInfo() {
-		log.debug("serviceKey :: {}", serviceKey);
-		log.debug("baseUrl :: {}", baseUrl);
-		log.debug("officeInfoUrl :: {}", officeInfoUrl);
-		log.debug("officeBicycleInfoUrl :: {}", officeBicycleInfoUrl);
+	public JsonNode getPbroInfo(int pageNo) {
 		
 		DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory();
 		factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE);
@@ -60,7 +56,7 @@ public class PbroUtils {
 						.path(officeInfoUrl)
 						.queryParam("serviceKey", serviceKey)
 						.queryParam("lcgvmnInstCd", "3000000000")
-						.queryParam("pageNo", "1")
+						.queryParam("pageNo", pageNo)
 						.queryParam("numOfRows", numOfRows)
 						.queryParam("type", resultType)
 						.build())
@@ -83,23 +79,40 @@ public class PbroUtils {
     }
 	
     public List<PbroInfoDTO> getPbroInfoAsDtoList() {
-
-    	JsonNode jsonNode = getPbroInfo();
+    	int pageNo = 1;
+    	
+    	// 최소 호출 pageNo 1 , numOfRows 100
+    	JsonNode jsonNode = getPbroInfo(pageNo);
 
         if (jsonNode != null) {
             List<PbroInfoDTO> PbroInfoDTOList = new ArrayList<>();
-            log.debug("jsonNode :: {}", jsonNode);
             
             JsonNode items = jsonNode.get("body").get("item");
             
             for (JsonNode node : items) {
-            	log.debug("node :: {}", node);
             	PbroInfoDTO PbroInfoDTO = convertJsonToDto(node);
             	PbroInfoDTOList.add(PbroInfoDTO);
             }
             
-            log.debug("PbroInfoDTOList :: {}", PbroInfoDTOList);
-
+            // 최초 응답에서 총 row수 확인
+            long totCount = Long.parseLong(new ObjectMapper().convertValue(jsonNode.get("body").get("totalCount"), String.class));
+            
+            // 전체 데이터수집을 위한 페이지수
+            long totPageNo = totCount / Long.parseLong(numOfRows) + 1;
+            
+            if (totPageNo > 1) {
+                for (int i = pageNo+1; i <= totPageNo; i++) {
+                	JsonNode pagingJsonNode = getPbroInfo(i);
+                    
+                    JsonNode pagingItems = pagingJsonNode.get("body").get("item");
+                    
+                    for (JsonNode node : pagingItems) {
+                    	PbroInfoDTO PbroInfoDTO = convertJsonToDto(node);
+                    	PbroInfoDTOList.add(PbroInfoDTO);
+                    }
+                }
+            }
+            
             return PbroInfoDTOList;
         }
 

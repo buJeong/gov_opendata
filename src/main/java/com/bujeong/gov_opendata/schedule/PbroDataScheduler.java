@@ -19,7 +19,7 @@ public class PbroDataScheduler {
     private final JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
 
-    @Scheduled(cron = "0/1 * * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void runPublicBicycleRentalDataJob() {
         try {
             log.debug("start :: runPublicBicycleRentalDataJob");

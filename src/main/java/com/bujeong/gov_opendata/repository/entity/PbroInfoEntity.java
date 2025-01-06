@@ -5,6 +5,7 @@ import lombok.*;
 
 @ToString
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,8 +19,11 @@ public class PbroInfoEntity {
     @Column(length = 300, nullable = true)
     private String rntstnNm;                   //대여소명
 
-    @Column(nullable = true)
-    private int lcgvmnInstCd;                   //지자체 코드
+    @Column(length = 10, nullable = true)
+    private String lcgvmnInstCd;                   //지자체 코드
+
+    @Column(length = 100, nullable = true)
+    private String lcgvmnInstNm;                   //지자체명
 
     @Column(length = 300, nullable = true)
     private String roadNmAddr;                //소재지도로명주소

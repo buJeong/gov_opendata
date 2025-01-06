@@ -11,6 +11,7 @@ import org.springframework.boot.jdbc.metadata.DataSourcePoolMetadataProvider;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -55,6 +56,7 @@ public class TransactionManagerConfig {
                 .create();
     }
 
+    @Primary
     @Bean(name = OPENDB_TRANSACTION_MANAGER)
     public PlatformTransactionManager opendbTransactionManager(@Qualifier(OPENDB_ENTITY_MANAGER_FACTORY) LocalContainerEntityManagerFactoryBean entityManagerFactory) {
         return new JpaTransactionManager(Objects.requireNonNull(entityManagerFactory.getObject()));

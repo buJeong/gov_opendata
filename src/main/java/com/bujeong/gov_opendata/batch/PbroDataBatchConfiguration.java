@@ -2,6 +2,7 @@ package com.bujeong.gov_opendata.batch;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -9,34 +10,32 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.bujeong.gov_opendata.config.TransactionManagerConfig;
 import com.bujeong.gov_opendata.dto.PbroInfoDTO;
+import com.bujeong.gov_opendata.repository.PbroInfoRepository;
+import com.bujeong.gov_opendata.repository.entity.PbroInfoEntity;
 import com.bujeong.gov_opendata.utils.PbroUtils;
 
-import jakarta.persistence.EntityManagerFactory;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class PbroDataBatchConfiguration {
 
-	@Autowired
-	private PbroUtils PbroUtils;
+	private final PbroUtils PbroUtils;
+	
+	private final ModelMapper modelMapper;
 	
     private final JobRepository jobRepository;
+    
     private final PlatformTransactionManager opendbTransactionManager;
-
-    public PbroDataBatchConfiguration(JobRepository jobRepository
-    									, @Qualifier(TransactionManagerConfig.OPENDB_TRANSACTION_MANAGER) PlatformTransactionManager transactionManager) {
-    	this.jobRepository = jobRepository;
-    	this.opendbTransactionManager = transactionManager;
-    }
+    
+    private final PbroInfoRepository pbroInfoRepository;
 
     @Bean
     public Job PbroDataUpdateJob() {
@@ -57,10 +56,8 @@ public class PbroDataBatchConfiguration {
     	return ((contribution, chunkContext) -> {
     		List<PbroInfoDTO> list = PbroUtils.getPbroInfoAsDtoList();
     		
-    		for (PbroInfoDTO dto : list) {
-    			log.debug("PbroInfoDTO :: {}", dto);
-    		}
-    		
+    		list.stream().forEach(item -> pbroInfoRepository.save(modelMapper.map(item, PbroInfoEntity.class)));
+
     		return RepeatStatus.FINISHED;
     	});
     }

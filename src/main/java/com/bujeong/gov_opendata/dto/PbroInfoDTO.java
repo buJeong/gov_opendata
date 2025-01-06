@@ -3,18 +3,22 @@ package com.bujeong.gov_opendata.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Getter
+@Setter
 public class PbroInfoDTO {
     private String rntstnId;                   //대여소 아이디
 
     private String rntstnNm;                   //대여소명
 
     private String lcgvmnInstCd;                   //지자체 코드
+
+    private String lcgvmnInstNm;                   //지자체명
 
     private String roadNmAddr;                //소재지도로명주소
 

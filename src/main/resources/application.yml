@@ -21,6 +21,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+      naming:
+        physical-strategy: com.bujeong.gov_opendata.utils.CamelCaseToSnakeAndUpperCaseStrategy
     properties:
       hibernate:
         format_sql: true
@@ -36,11 +38,11 @@ logging:
 
 
 apis:
-  numOfRows: 10
+  numOfRows: 100
   resultType: json
   keys:
-    encoding: 발급받은키입력
-    decoding: 발급받은키입력
+    encoding: T9iutiS8H0yIhoHFBhAgE42PhA7rMkRy1lC9Z0B6YT1kyJZuGPCrBcXKtDvyakhUJWYRmylk88wRbHENhHUN4g%3D%3D
+    decoding: T9iutiS8H0yIhoHFBhAgE42PhA7rMkRy1lC9Z0B6YT1kyJZuGPCrBcXKtDvyakhUJWYRmylk88wRbHENhHUN4g==
   urls:
     base: apis.data.go.kr
     operation:

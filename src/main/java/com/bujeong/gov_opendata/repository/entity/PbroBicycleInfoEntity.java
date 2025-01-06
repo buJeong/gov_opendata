@@ -22,7 +22,7 @@ public class PbroBicycleInfoEntity {
     private String rntstnNm;                   //대여소명
 
     @Column(nullable = true)
-    private int lcgvmnInstCd;                 //지자체 코드
+    private String lcgvmnInstCd;                 //지자체 코드
 
     @Column(nullable = true)
     private int bcyclTpkctNocs;                 //자전거 주차 총 건수
